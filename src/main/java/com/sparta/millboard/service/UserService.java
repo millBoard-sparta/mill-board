@@ -1,6 +1,7 @@
 package com.sparta.millboard.service;
 
 import com.sparta.millboard.dto.request.UserRequestDto;
+import com.sparta.millboard.dto.response.LoginResponseDto;
 import com.sparta.millboard.dto.response.UserResponseDto;
 import com.sparta.millboard.model.User;
 import com.sparta.millboard.repository.UserRepository;
@@ -38,10 +39,11 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UserResponseDto(user.getUsername());
+        return new UserResponseDto(user);
     }
 
-    public UserResponseDto loginUser(UserRequestDto requestDto, HttpServletResponse response) {
+    // 사용자 : 로그인
+    public LoginResponseDto loginUser(UserRequestDto requestDto, HttpServletResponse response) {
         log.info("loginUser 메서드 실행");
 
         User user = userRepository.findByUsername(requestDto.getUsername())
@@ -59,6 +61,17 @@ public class UserService {
 
         response.setHeader("Authorization", accessToken);
 
-        return new UserResponseDto(user.getUsername(),accessToken);
+        return new LoginResponseDto(user.getUsername(),accessToken);
+    }
+
+    public UserResponseDto readUser(String token) {
+        log.info("readUser 메서드 실행");
+
+        String username = jwtService.extractUsername(token);
+
+        User user = userRepository.findByUsername(username).orElseThrow(()
+                -> new RuntimeException("사용자 찾을 수 없음"));
+
+        return new UserResponseDto(user);
     }
 }

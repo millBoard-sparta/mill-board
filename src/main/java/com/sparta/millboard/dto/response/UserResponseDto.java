@@ -1,5 +1,6 @@
 package com.sparta.millboard.dto.response;
 
+import com.sparta.millboard.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,9 +10,14 @@ public class UserResponseDto {
 
     private String username;
 
-    private String accessToken;
+    private User.Role role;
 
     public UserResponseDto(String username) {
         this.username = username;
+    }
+
+    public UserResponseDto(User user) {
+        this.username = user.getUsername();
+        this.role = user.getRole();
     }
 }
