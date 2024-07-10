@@ -2,6 +2,7 @@ package com.sparta.millboard.controller;
 
 import com.sparta.millboard.common.CommonResponse;
 import com.sparta.millboard.dto.request.SignupRequestDto;
+import com.sparta.millboard.dto.response.SignupResponseDto;
 import com.sparta.millboard.model.User;
 import com.sparta.millboard.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/users/signup")
-    public ResponseEntity<CommonResponse<User>> createUser(@RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<CommonResponse<SignupResponseDto>> createUser(@RequestBody SignupRequestDto requestDto) {
 
-        CommonResponse<User> response = new CommonResponse<>(
+        SignupResponseDto signupResponseDto = userService.createUser(requestDto);
+
+        CommonResponse<SignupResponseDto> response = new CommonResponse<>(
                 "회원가입 성공",
                 HttpStatus.CREATED.value(),
-                userService.createUser(requestDto)
+                signupResponseDto
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

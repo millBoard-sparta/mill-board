@@ -1,5 +1,6 @@
 package com.sparta.millboard.service;
 
+import com.sparta.millboard.dto.response.SignupResponseDto;
 import com.sparta.millboard.model.User;
 import com.sparta.millboard.dto.request.SignupRequestDto;
 import com.sparta.millboard.model.User;
@@ -22,7 +23,7 @@ public class UserService {
     }
 
     // 사용자 : 회원가입
-    public User createUser(SignupRequestDto requestDto) {
+    public SignupResponseDto createUser(SignupRequestDto requestDto) {
         log.info("createUser 메서드 실행");
 
         User user = User.builder()
@@ -30,7 +31,9 @@ public class UserService {
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .build();
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return new SignupResponseDto(user.getUsername());
     }
 
 }
