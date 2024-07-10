@@ -1,8 +1,10 @@
 package com.sparta.millboard.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 @Table(name = "boards")
+@SuperBuilder
 public class Board {
 
     @Id
@@ -21,10 +24,9 @@ public class Board {
 
     private String description;
 
-    @OneToMany
-    private List<BoardColumn> boardColumns;
-    
-    @OneToMany
-    private List<BoardPartner> boardPartners;
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<BoardColumn> boardColumns;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardPartner> boardPartners;
 }

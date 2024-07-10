@@ -14,5 +14,6 @@ public class BoardColumn {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @Column(name = "column_order")
     private Integer order;
 }
