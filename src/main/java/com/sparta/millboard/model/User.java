@@ -1,8 +1,10 @@
 package com.sparta.millboard.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 @Table(name = "users")
 public class User {
     @Id
@@ -16,6 +18,7 @@ public class User {
 
     private String refreshToken; // uuid
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public enum Role {

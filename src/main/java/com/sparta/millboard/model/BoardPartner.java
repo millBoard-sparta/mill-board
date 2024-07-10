@@ -1,10 +1,11 @@
 package com.sparta.millboard.model;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+@SuperBuilder
 @Entity
 @Getter
 @RequiredArgsConstructor
