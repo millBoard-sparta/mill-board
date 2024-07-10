@@ -24,9 +24,18 @@ public class Board {
 
     private String description;
 
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<BoardColumn> boardColumns;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardColumn> boardColumns;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardPartner> boardPartners;
+
+    public void update(Board entity) {
+        if (entity.getTitle() != null && !entity.getTitle().isEmpty()) {
+            this.title = entity.getTitle();
+        }
+        if (entity.getDescription() != null && !entity.getDescription().isEmpty()) {
+            this.description = entity.getDescription();
+        }
+    }
 }

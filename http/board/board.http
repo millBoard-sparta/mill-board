@@ -1,0 +1,31 @@
+### create
+POST localhost:8080/api/board
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description"
+}
+
+> {%
+client.global.set("board_id", response.body.id)
+%}
+
+### get
+GET localhost:8080/api/board/{{board_id}}
+
+### update
+PUT localhost:8080/api/board/{{board_id}}
+Content-Type: application/json
+
+{
+  "title": "updated title",
+  "description": "updated desc"
+}
+
+
+### delete
+DELETE localhost:8080/api/board/{{board_id}}
+
+
+
