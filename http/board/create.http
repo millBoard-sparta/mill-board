@@ -1,0 +1,12 @@
+POST localhost:8080/api/board
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description"
+}
+
+> {%
+client.global.set("board_id", response.body.data.id)
+%}
+
