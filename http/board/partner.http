@@ -1,0 +1,27 @@
+### create
+POST localhost:8080/api/boards
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description"
+}
+
+> {%
+    client.global.set("board_id", response.body.id)
+%}
+
+### 파트너 추가
+POST localhost:8080/api/boards/{{board_id}}/partners
+Content-Type: application/json
+
+{
+  "userId": 1
+}
+
+> {%
+    client.global.set("partner_id", response.body.id);
+%}
+
+### 파트너 삭제
+DELETE localhost:8080/api/boards/{{board_id}}/partners/{{partner_id}}
