@@ -15,8 +15,10 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     private String refreshToken; // uuid
@@ -34,6 +36,10 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
+    }
+
+    public void addRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
 }

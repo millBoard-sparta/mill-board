@@ -32,7 +32,10 @@ public class SecurityConfig {
         http.logout(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/signup").permitAll()
+                        .requestMatchers(
+                                "/api/users/signup",
+                                "/api/users/login"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
