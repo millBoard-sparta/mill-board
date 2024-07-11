@@ -1,12 +1,75 @@
 package com.sparta.millboard.controller;
 
-import com.sparta.millboard.repository.UserRepository;
+import com.sparta.millboard.common.CommonResponse;
+import com.sparta.millboard.dto.request.UserRequestDto;
+import com.sparta.millboard.dto.response.LoginResponseDto;
+import com.sparta.millboard.dto.response.UserResponseDto;
 import com.sparta.millboard.service.UserService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
+
+    private final UserService userService;
+
+    // 사용자 : 회원가입
+    @PostMapping("/api/users/signup")
+    public ResponseEntity<CommonResponse<UserResponseDto>> createUser(
+            @RequestBody UserRequestDto requestDto
+    ) {
+
+        UserResponseDto responseDto = userService.createUser(requestDto);
+
+        CommonResponse<UserResponseDto> response = new CommonResponse<>(
+                "회원가입 성공",
+                HttpStatus.CREATED.value(),
+                responseDto
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+    }
+
+    // 사용자 : 로그인
+    @PostMapping("/api/users/login")
+    public ResponseEntity<CommonResponse<LoginResponseDto>> loginUser(
+            @RequestBody UserRequestDto requestDto,
+            HttpServletResponse httpServletResponse
+    ) {
+
+        LoginResponseDto responseDto = userService.loginUser(requestDto,httpServletResponse);
+
+        CommonResponse<LoginResponseDto> response = new CommonResponse<>(
+                "로그인 성공",
+                HttpStatus.OK.value(),
+                responseDto
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+    }
+
+    // 사용자 : 프로필 조회
+    @GetMapping("/api/users/profile")
+    public ResponseEntity<CommonResponse<UserResponseDto>> readUser(
+            @RequestHeader("Authorization") String token
+    ) {
+
+        UserResponseDto responseDto = userService.readUser(token);
+
+        CommonResponse<UserResponseDto> response = new CommonResponse<>(
+                "프로필 조회 성공",
+                HttpStatus.OK.value(),
+                responseDto
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
 }
