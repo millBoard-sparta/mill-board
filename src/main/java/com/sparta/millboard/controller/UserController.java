@@ -8,12 +8,14 @@ import com.sparta.millboard.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j(topic = "UserController")
 public class UserController {
 
     private final UserService userService;
@@ -58,9 +60,11 @@ public class UserController {
     // 사용자 : 프로필 조회
     @GetMapping("/api/users/profile")
     public ResponseEntity<CommonResponse<UserResponseDto>> readUser(
-            @RequestHeader("Authorization") String token
+            HttpServletRequest request
     ) {
+        String token = (String)request.getAttribute("processedToken");
 
+      log.info("토큰 받음."+ token);
         UserResponseDto responseDto = userService.readUser(token);
 
         CommonResponse<UserResponseDto> response = new CommonResponse<>(

@@ -70,7 +70,7 @@ public class JwtService {
     private String createToken(String username, Long expirationTime) {
 
         Date now = new Date();
-        return BEARER_PREFIX +
+        String token = BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
                         .setIssuedAt(now)
@@ -78,15 +78,28 @@ public class JwtService {
                         .signWith(key, signatureAlgorithm)
                         .compact();
 
+        log.info("CreateToken 메서드로 생성된 토큰 : " + token);
+        return token;
     }
 
     // 토큰 검증
     public boolean isValidToken(String token) {
 
-        String okToken = getToken(token);
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(okToken);
+
+            if (token == null) {
+                log.error("JWT 토큰이 null 입니다." + token);
+                return false;
+            }
+
+//            if (token.startsWith("Bearer ")) {
+//                token = token.substring(7);
+//            }
+
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
             return true;
+
         } catch (JwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (IllegalArgumentException e) {
@@ -100,6 +113,7 @@ public class JwtService {
     public String getErrorMessage(String token) {
 
         String okToken = getToken(token);
+
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(okToken);
             return "정상 JWT token 입니다.";
@@ -151,13 +165,11 @@ public class JwtService {
 
     // 토큰 가져오기
     public String getToken(String token) {
-
-        if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
-
-            return token.replace(BEARER_PREFIX, "");
-
+        log.info("getToken 메서드 실행" + token);
+        if (StringUtils.hasText(token)) {
+            return token;
         }
-
+        log.error("JWT 토큰 접두사 오류 발생. Token == null 변경." + token);
         return null;
 
     }

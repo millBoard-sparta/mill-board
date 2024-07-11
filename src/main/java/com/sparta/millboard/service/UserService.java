@@ -61,11 +61,16 @@ public class UserService {
 
         response.setHeader("Authorization", accessToken);
 
-        return new LoginResponseDto(user.getUsername(),accessToken);
+        return new LoginResponseDto(user.getUsername(),accessToken,refreshToken);
     }
 
     public UserResponseDto readUser(String token) {
         log.info("readUser 메서드 실행");
+
+        if (!jwtService.isValidToken(token)) {
+            log.error("토큰값 유효하지 않음.");
+            throw new RuntimeException("유효하지 않은 토큰입니다.");
+        }
 
         String username = jwtService.extractUsername(token);
 
