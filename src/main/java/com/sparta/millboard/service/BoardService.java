@@ -26,8 +26,8 @@ public class BoardService {
         );
     }
 
-    public BoardResponseDto getBoardById(Long id) {
-        return BoardResponseDto.from(this.boardRepository.getReferenceById(id));
+    public Board getBoardById(Long id) {
+        return this.boardRepository.getReferenceById(id);
     }
 
     @Transactional
