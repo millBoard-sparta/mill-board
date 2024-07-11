@@ -92,10 +92,6 @@ public class JwtService {
                 return false;
             }
 
-//            if (token.startsWith("Bearer ")) {
-//                token = token.substring(7);
-//            }
-
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 
             return true;
@@ -106,22 +102,6 @@ public class JwtService {
             log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
         }
         return false;
-
-    }
-
-    // 에러 메시지 가져오기
-    public String getErrorMessage(String token) {
-
-        String okToken = getToken(token);
-
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(okToken);
-            return "정상 JWT token 입니다.";
-        } catch (JwtException e) {
-            return "Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.";
-        } catch (IllegalArgumentException e) {
-            return "JWT claims is empty, 잘못된 JWT 토큰 입니다.";
-        }
 
     }
 
