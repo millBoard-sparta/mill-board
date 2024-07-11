@@ -2,10 +2,10 @@ package com.sparta.millboard.controller;
 
 import com.sparta.millboard.common.CommonResponse;
 import com.sparta.millboard.dto.request.UserRequestDto;
+import com.sparta.millboard.dto.request.UserUpdateRequestDto;
 import com.sparta.millboard.dto.response.LoginResponseDto;
 import com.sparta.millboard.dto.response.UserResponseDto;
 import com.sparta.millboard.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ public class UserController {
             @RequestBody UserRequestDto requestDto
     ) {
 
+        log.info("createUser 메서드 실행");
         UserResponseDto responseDto = userService.createUser(requestDto);
 
         CommonResponse<UserResponseDto> response = new CommonResponse<>(
@@ -45,6 +46,7 @@ public class UserController {
             HttpServletResponse httpServletResponse
     ) {
 
+        log.info("loginUser 메서드 실행");
         LoginResponseDto responseDto = userService.loginUser(requestDto,httpServletResponse);
 
         CommonResponse<LoginResponseDto> response = new CommonResponse<>(
@@ -60,11 +62,10 @@ public class UserController {
     // 사용자 : 프로필 조회
     @GetMapping("/api/users/profile")
     public ResponseEntity<CommonResponse<UserResponseDto>> readUser(
-            HttpServletRequest request
+            @RequestAttribute("processedToken") String token
     ) {
-        String token = (String)request.getAttribute("processedToken");
 
-      log.info("토큰 받음."+ token);
+      log.info("readUser 메서드 실행");
         UserResponseDto responseDto = userService.readUser(token);
 
         CommonResponse<UserResponseDto> response = new CommonResponse<>(
@@ -74,6 +75,26 @@ public class UserController {
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    // 사용자 : 회원 정보 수정
+    @PutMapping("/api/users/profile")
+    public ResponseEntity<CommonResponse<UserResponseDto>> updateUser(
+            @RequestAttribute("processedToken") String token,
+            @RequestBody UserUpdateRequestDto requestDto
+    ) {
+
+        log.info("updateUser 메서드 실행");
+        UserResponseDto responseDto = userService.updateUser(requestDto,token);
+
+        CommonResponse<UserResponseDto> response = new CommonResponse<>(
+                "프로필 수정 완료",
+                HttpStatus.OK.value(),
+                responseDto
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 
 }
