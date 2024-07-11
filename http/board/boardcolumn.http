@@ -1,0 +1,33 @@
+### board create
+POST localhost:8080/api/boards
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description"
+}
+
+> {%
+    client.global.set("board_id", response.body.id)
+%}
+
+### board column create
+POST localhost:8080/api/boards/{{board_id}}/columns
+Content-Type: application/json
+
+{
+  "statusName": "backlog",
+  "order": 1
+}
+
+> {%
+    client.global.set("column_id", response.body.id)
+%}
+
+### update column
+PUT localhost:8080/api/boards/{{board_id}}/columns/{{column_id}}
+Content-Type: application/json
+
+{
+  "order": 100
+}
