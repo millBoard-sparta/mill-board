@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>보드 생성 및 수정</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="form-container">
+    <h2>보드 생성</h2>
+    <form action="/new" method="POST">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title">
+        <label for="description">한 줄 설명:</label>
+        <input type="text" id="description" name="description">
+        <button type="submit">보드 생성</button>
+    </form>
+</div>
+<div class="form-container">
+    <h2>보드 수정</h2>
+    <form action="/edit" method="POST">
+        <label for="edit-title">제목:</label>
+        <input type="text" id="edit-title" name="title">
+        <label for="edit-description">한 줄 설명:</label>
+        <input type="text" id="edit-description" name="description">
+        <button type="submit">보드 수정</button>
+    </form>
+</div>
+</body>
+</html>
