@@ -66,34 +66,22 @@ public class UserService {
     }
 
     // 사용자 : 프로필 조회
-    public UserResponseDto readUser(String token) {
-        log.info("readUser 메서드 실행");
+    public UserResponseDto getUser(User user) {
 
-        if (!jwtService.isValidToken(token)) {
-            log.error("토큰값 유효하지 않음.");
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
-        }
+        log.info("updateUser 메서드 실행 User : " + user);
 
-        String username = jwtService.extractUsername(token);
+        User profile = userRepository.findByUsername(user.getUsername()).orElseThrow(()
+                -> new RuntimeException("사용자를 찾을 수 없습니다. username : " +user.getUsername()));
 
-        User user = userRepository.findByUsername(username).orElseThrow(()
-                -> new RuntimeException("사용자 찾을 수 없음"));
-
-        return new UserResponseDto(user);
+        log.info("updateUser 메서드 종료 profile : " + profile);
+        return new UserResponseDto(profile);
     }
 
     // 사용자 : 프로필 수정
-    public UserResponseDto updateUser(UserUpdateRequestDto requestDto, String token) {
+    public UserResponseDto updateUser(UserUpdateRequestDto requestDto, User user) {
         log.info("updateUser 메서드 실행");
 
-        if (!jwtService.isValidToken(token)) {
-            log.error("토큰값 유효하지 않음.");
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
-        }
-
-        String username = jwtService.extractUsername(token);
-
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
+        User newProfile = userRepository.findByUsername(user.getUsername()).orElseThrow(() ->
                 new RuntimeException("username 에 맞는 user 를 찾을 수 없음"));
 
         if (requestDto.getNewUsername() != null) {
@@ -123,9 +111,9 @@ public class UserService {
             }
         }
 
-        userRepository.save(user);
+        userRepository.save(newProfile);
 
-        return new UserResponseDto(user);
+        return new UserResponseDto(newProfile);
     }
 
 }
