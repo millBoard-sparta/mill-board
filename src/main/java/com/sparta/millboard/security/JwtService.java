@@ -84,12 +84,16 @@ public class JwtService {
 
     // 토큰 검증
     public boolean isValidToken(String token) {
-
+        log.info("isValidToken 메서드 실행. 받은 token : " + token);
         try {
 
             if (token == null) {
                 log.error("JWT 토큰이 null 입니다." + token);
                 return false;
+            }
+
+            if (token.startsWith(BEARER_PREFIX)) {
+                token = token.substring(7);
             }
 
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -114,22 +118,23 @@ public class JwtService {
 
     // 토큰에서 사용자 주체를 추출하는 메서드
     public String extractUsername(String token) {
-
+        log.info("extractUsername 메서드 실행 받은 토큰 : " + token);
         return extractClaim(token, Claims::getSubject);
 
     }
 
     // 토큰에서 특정 클레임을 추출하는 메서드
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-
+        log.info("extractClaim 메서드 실행");
         final Claims claims = extractAllClaims(token);
+        log.info("extractClaim 메서드에서 뽑아낸 클래임 : " + claims);
         return claimsResolver.apply(claims);
 
     }
 
     // 토큰에서 모든 클레임 추출
     private Claims extractAllClaims(String token) {
-
+        log.info("extractAllClaims 메서드 실행");
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -138,7 +143,7 @@ public class JwtService {
     }
 
     public Claims getClaims(String token) {
-
+        log.info("getClaims 메서드 실행.");
         return extractAllClaims(token);
 
     }
