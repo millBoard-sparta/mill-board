@@ -26,9 +26,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public void updateUsername(String newUsername) {
+        this.username = newUsername;
+    }
+
     public enum Role {
         USER,
-        MANAGER
+        MANAGER,
+    }
+
+    public enum status {
+        INACTIVE,
+        ACTIVE,
+        DISABLED
     }
 
     @Builder
@@ -40,6 +50,10 @@ public class User {
 
     public void addRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 
 }

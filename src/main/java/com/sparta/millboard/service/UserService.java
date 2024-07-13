@@ -1,6 +1,7 @@
 package com.sparta.millboard.service;
 
 import com.sparta.millboard.dto.request.UserRequestDto;
+import com.sparta.millboard.dto.request.UserUpdateRequestDto;
 import com.sparta.millboard.dto.response.LoginResponseDto;
 import com.sparta.millboard.dto.response.UserResponseDto;
 import com.sparta.millboard.model.User;
@@ -61,17 +62,58 @@ public class UserService {
 
         response.setHeader("Authorization", accessToken);
 
-        return new LoginResponseDto(user.getUsername(),accessToken);
+        return new LoginResponseDto(user.getUsername(),accessToken,refreshToken);
     }
 
-    public UserResponseDto readUser(String token) {
-        log.info("readUser 메서드 실행");
+    // 사용자 : 프로필 조회
+    public UserResponseDto getUser(User user) {
 
-        String username = jwtService.extractUsername(token);
+        log.info("updateUser 메서드 실행 User : " + user);
 
-        User user = userRepository.findByUsername(username).orElseThrow(()
-                -> new RuntimeException("사용자 찾을 수 없음"));
+        User profile = userRepository.findByUsername(user.getUsername()).orElseThrow(()
+                -> new RuntimeException("사용자를 찾을 수 없습니다. username : " +user.getUsername()));
 
-        return new UserResponseDto(user);
+        log.info("updateUser 메서드 종료 profile : " + profile);
+        return new UserResponseDto(profile);
     }
+
+    // 사용자 : 프로필 수정
+    public UserResponseDto updateUser(UserUpdateRequestDto requestDto, User user) {
+        log.info("updateUser 메서드 실행");
+
+        User newProfile = userRepository.findByUsername(user.getUsername()).orElseThrow(() ->
+                new RuntimeException("username 에 맞는 user 를 찾을 수 없음"));
+
+        if (requestDto.getNewUsername() != null) {
+            String newUsername = requestDto.getNewUsername().trim();
+            if (!newUsername.isEmpty()) {
+                user.updateUsername(newUsername);
+            } else {
+                throw new IllegalArgumentException("새 사용자 이름은 공백일 수 없습니다.");
+            }
+        }
+
+        if (requestDto.getPassword() != null && !requestDto.getPassword().trim().isEmpty()) {
+            if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("비밀번호가 올바르지 않습니다.");
+            }
+
+            if (requestDto.getNewPassword() != null) {
+                String newPassword = requestDto.getNewPassword().trim();
+                if (!newPassword.isEmpty()) {
+                    if (passwordEncoder.matches(newPassword, user.getPassword())) {
+                        throw new IllegalArgumentException("새 비밀번호는 이전 비밀번호와 동일할 수 없습니다.");
+                    }
+                    user.updatePassword(passwordEncoder.encode(newPassword));
+                } else {
+                    throw new IllegalArgumentException("새 비밀번호는 공백일 수 없습니다.");
+                }
+            }
+        }
+
+        userRepository.save(newProfile);
+
+        return new UserResponseDto(newProfile);
+    }
+
 }
