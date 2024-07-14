@@ -100,4 +100,20 @@ public class UserController {
 
     }
 
+    // 사용자 : 토큰 재발급
+    @PutMapping("/api/token/refresh")
+    public ResponseEntity<CommonResponse<LoginResponseDto>> reRefreshToken(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+
+        LoginResponseDto responseDto = userService.refreshAccessToken(userPrincipal.getUser());
+
+        CommonResponse<LoginResponseDto> response = new CommonResponse<>(
+                "액세스 토큰 재발급 성공",
+                HttpStatus.OK.value(),
+                responseDto
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }

@@ -116,4 +116,16 @@ public class UserService {
         return new UserResponseDto(newProfile);
     }
 
+    // 사용자 : 토큰 재발급
+    public LoginResponseDto refreshAccessToken(User user) {
+        String refreshToken = user.getRefreshToken();
+        if (refreshToken == null || !jwtService.isValidToken(refreshToken)) {
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+
+        String newAccessToken = jwtService.generateAccessToken(user.getUsername());
+
+        return new LoginResponseDto(user.getUsername(), newAccessToken, refreshToken);
+    }
+
 }
