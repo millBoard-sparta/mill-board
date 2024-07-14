@@ -1,33 +1,123 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>보드</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+        }
+        .board-columns {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+        }
+        .column {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            width: 30%;
+        }
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .add-column-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .edit-button {
+            background-color: #ffc107;
+            color: white;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+        }
+        .add-card-button {
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="board-container">
-    <h2>보드</h2>
+    <div class="board-header">
+        <h1>보드 /{boardname}</h1>
+        <div>
+            <button class="edit-button">수정</button>
+            <button class="delete-button">삭제</button>
+        </div>
+    </div>
     <p>한 줄 설명</p>
-    <div class="column-container">
+    <button class="add-column-button">칼럼 추가</button>
+    <div class="board-columns">
         <div class="column">
-            <h3>backlog</h3>
-            <button>칼럼 추가</button>
+            <div class="column-header">
+                <h2>backlog</h2>
+                <div>
+                    <button class="edit-button">수정</button>
+                    <button class="delete-button">삭제</button>
+                </div>
+            </div>
             <div class="card">Card</div>
             <div class="card">Card</div>
-            <button>카드 추가</button>
+            <div class="card">Card</div>
+            <button class="add-card-button">카드추가</button>
         </div>
         <div class="column">
-            <h3>In Progress</h3>
+            <div class="column-header">
+                <h2>In Progress</h2>
+                <div>
+                    <button class="edit-button">수정</button>
+                    <button class="delete-button">삭제</button>
+                </div>
+            </div>
             <div class="card">Card</div>
             <div class="card">Card</div>
-            <button>카드 추가</button>
+            <div class="card">Card</div>
+            <button class="add-card-button">카드추가</button>
         </div>
         <div class="column">
-            <h3>Done</h3>
+            <div class="column-header">
+                <h2>Done</h2>
+                <div>
+                    <button class="edit-button">수정</button>
+                    <button class="delete-button">삭제</button>
+                </div>
+            </div>
             <div class="card">Card</div>
             <div class="card">Card</div>
-            <button>카드 추가</button>
+            <div class="card">Card</div>
+            <button class="add-card-button">카드추가</button>
         </div>
     </div>
 </div>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 / 회원가입</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .form-container {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-container">
+        <h2>로그인</h2>
+        <form id="loginForm" method="post">
+            <div class="form-group">
+                <label for="loginUsername">ID:</label>
+                <input type="text" id="loginUsername" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">PASS:</label>
+                <input type="password" id="loginPassword" name="password" required>
+            </div>
+            <button type="submit">로그인</button>
+        </form>
+    </div>
+    <div class="form-container">
+        <h2>회원가입</h2>
+        <form id="signupForm" method="post">
+            <div class="form-group">
+                <label for="signupUsername">ID:</label>
+                <input type="text" id="signupUsername" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="signupPassword">PASS:</label>
+                <input type="password" id="signupPassword" name="password" required>
+            </div>
+            <button type="submit">회원가입</button>
+        </form>
+    </div>
+</div>
+
+<div id="signupModal" class="modal">
+    <div class="modal-content">
+        <p>회원가입이 완료되었습니다.</p>
+        <button id="modalCloseBtn">확인</button>
+    </div>
+</div>
+
+<script>
+    function handleSubmit(form, event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 201 || response.ok) {
+                    if (form.id === 'signupForm') {
+                        document.getElementById('signupModal').style.display = "block";
+
+                    } else {
+                        // 로그인 성공 시 보드 페이지로 리디렉션
+                        window.location.href = '/board';
+                    }
+                } else {
+                    alert('요청에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('요청 중 오류가 발생했습니다.');
+            });
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        handleSubmit(this, e);
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        handleSubmit(this, e);
+    });
+
+    document.getElementById('modalCloseBtn').onclick = function() {
+        document.getElementById('signupModal').style.display = "none";
+        window.location.href = '/auth';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('signupModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+            window.location.href = '/auth';
+        }
+    }
+</script>
+</body>
+</html>
