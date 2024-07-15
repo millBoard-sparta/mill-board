@@ -38,18 +38,10 @@ public class CommentController {
         return ResponseEntity.ok(comment);
     }
 
-    @PutMapping("/comment/{commentId}")
-    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,
-                                                            @RequestBody CommentRequestDto commentRequestDto,
-                                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        CommentResponseDto updatedComment = commentService.updateComment(commentRequestDto, commentId, userPrincipal);
-        return ResponseEntity.ok(updatedComment);
-    }
-
     @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId,
-                                              @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId,
+                                                @AuthenticationPrincipal UserPrincipal userPrincipal) {
         commentService.deleteComment(commentId, userPrincipal);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("댓글 삭제 성공!");
     }
 }
