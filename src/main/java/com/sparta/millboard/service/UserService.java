@@ -58,8 +58,13 @@ public class UserService {
         String accessToken = jwtService.generateAccessToken(requestDto.getUsername());
         String refreshToken = jwtService.generateRefreshToken(requestDto.getUsername());
 
+
         user.addRefreshToken(refreshToken);
-        response.addCookie(new Cookie("access_token", accessToken));
+
+        Cookie cookie = new Cookie("access_token", accessToken);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
         response.addCookie(new Cookie("refresh_token", refreshToken));
         userRepository.save(user);
 

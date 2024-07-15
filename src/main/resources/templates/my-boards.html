@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 보드</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+    }
+    .board-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .board-item {
+      background-color: #f0f0f0;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .board-item:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+  <h1>내 보드</h1>
+  <ul id="boardList" class="board-list">
+    <!-- 보드 목록이 여기에 동적으로 추가됩니다 -->
+  </ul>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const token = Cookies.get('access_token');
+    console.log('Token from cookie:', token);
+
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      window.location.href = '/auth';
+      return;
+    }
+
+    fetch('/api/boards/my-boards', {
+      method: 'GET',
+      headers: {
+        'Authorization': token
+      },
+      credentials: 'include'
+    })
+            .then(response => {
+              console.log('Response status:', response.status);
+              if (!response.ok) {
+                if (response.status === 401) {
+                  throw new Error('인증이 만료되었습니다. 다시 로그인해주세요.');
+                }
+                throw new Error('HTTP status ' + response.status);
+              }
+              return response.json();
+            })
+            .then(boards => {
+              console.log('Received data:', boards);
+              const boardList = document.getElementById('boardList');
+              if (boards.length === 0) {
+                boardList.innerHTML = '<li>보유한 보드가 없습니다.</li>';
+                return;
+              }
+              boards.forEach(board => {
+                const li = document.createElement('li');
+                li.className = 'board-item';
+                li.textContent = board.title;
+                li.onclick = function() {
+                  window.location.href = '/board/' + board.id;
+                };
+                boardList.appendChild(li);
+              });
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              if (error.message.includes('인증이 만료되었습니다')) {
+                alert(error.message);
+                window.location.href = '/auth';
+              } else {
+                alert('보드 목록을 불러오는 데 실패했습니다: ' + error.message);
+              }
+            });
+  });
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>MillBoard</title>
+    <title>로그인 / 회원가입</title>
     <style>
         .container {
             display: flex;
@@ -77,7 +77,7 @@
 <div class="container">
     <div class="form-container">
         <h2>로그인</h2>
-        <form th:action="@{/api/users/login}" th:object="${userRequestDto}" method="post">
+        <form id="loginForm" th:action="@{/api/users/login}" th:object="${userRequestDto}" method="post">
             <div class="form-group">
                 <label for="loginUsername">ID:</label>
                 <input type="text" id="loginUsername" th:field="*{username}" required>
@@ -112,40 +112,75 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
 <script>
-    const form = document.getElementById('signupForm');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
     const modal = document.getElementById('signupModal');
     const closeBtn = document.getElementById('modalCloseBtn');
 
-    form.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const formData = new FormData(form);
+        const formData = new FormData(this);
         const data = Object.fromEntries(formData);
 
-        fetch(form.action, {
+        fetch(this.action, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
+            credentials: 'include'  // 쿠키를 포함하기 위해 추가
+        })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === 200) {
+                    // 서버에서 설정한 쿠키를 사용하므로 여기서 추가 설정은 필요 없음
+                    console.log('Login successful');
+                    window.location.href = '/main';  // 메인 페이지로 리다이렉트
+                } else {
+                    throw new Error(data.msg || '로그인에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+    });
+
+    signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('서버 응답이 실패했습니다.');
                 }
                 return response.json();
             })
             .then(data => {
                 if(data.status === 201) {
-                    modal.style.display = "block";
+                    console.log('회원가입 성공:', data);
+                    alert('회원가입이 완료되었습니다. 로그인해주세요.');
+                    window.location.href = '/auth';  // 로그인 페이지로 리다이렉트
                 } else {
-                    alert('회원가입에 실패했습니다.');
+                    throw new Error(data.msg || '회원가입에 실패했습니다.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('회원가입 중 오류가 발생했습니다.');
+                alert(error.message);
             });
     });
 
@@ -160,7 +195,6 @@
             window.location.href = '/auth';
         }
     }
-
 </script>
 </body>
 </html>

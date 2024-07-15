@@ -57,7 +57,7 @@ public class UserController {
                 responseDto
         );
 
-        httpServletResponse.setHeader("Location", "/board");
+        httpServletResponse.setHeader("Location", "/main");
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }

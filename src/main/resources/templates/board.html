@@ -57,50 +57,22 @@
 <body>
 <div class="container">
   <div class="board-header">
-    <h1>보드 {boardname}</h1>
+    <h1 th:text="${board.title}">보드 이름</h1>
     <div>
       <button class="btn">수정</button>
       <button class="btn">삭제</button>
     </div>
   </div>
   <div class="column-container">
-    <div class="column">
+    <div class="column" th:each="column : ${board.boardColumns}">
       <div class="column-header">
-        <h3>backlog</h3>
+        <h3 th:text="${column.statusName}">컬럼 이름</h3>
         <div>
           <button class="btn">수정</button>
           <button class="btn">삭제</button>
         </div>
       </div>
-      <div class="card">Card</div>
-      <div class="card">Card</div>
-      <div class="card">Card</div>
-      <button class="btn">카드추가</button>
-    </div>
-    <div class="column">
-      <div class="column-header">
-        <h3>In Progress</h3>
-        <div>
-          <button class="btn">수정</button>
-          <button class="btn">삭제</button>
-        </div>
-      </div>
-      <div class="card">Card</div>
-      <div class="card">Card</div>
-      <div class="card">Card</div>
-      <button class="btn">카드추가</button>
-    </div>
-    <div class="column">
-      <div class="column-header">
-        <h3>Done</h3>
-        <div>
-          <button class="btn">수정</button>
-          <button class="btn">삭제</button>
-        </div>
-      </div>
-      <div class="card">Card</div>
-      <div class="card">Card</div>
-      <div class="card">Card</div>
+      <!-- 카드 표시 로직은 추후 구현 필요 -->
       <button class="btn">카드추가</button>
     </div>
   </div>
