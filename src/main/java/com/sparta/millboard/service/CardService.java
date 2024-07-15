@@ -34,7 +34,7 @@ public class CardService {
 
         Card card = cardRequestDto.toEntity();
         card.setColumn(column);
-        card.setAuthor(user);
+        card.setAuthor(user.getUsername());
 
         if(cardRequestDto.getWorkerId()>0){
             card.setWorker(userService.getById(cardRequestDto.getWorkerId()));
@@ -50,8 +50,8 @@ public class CardService {
         UserPrincipal userPrincipal) {
 
         Card card = getById(cardId);
-        Long tryUserId = userPrincipal.getUser().getId();
-        if (!Objects.equals(card.getAuthor().getId(), tryUserId)) {
+        String tryUsername = userPrincipal.getUser().getUsername();
+        if (!Objects.equals(card.getAuthorName(), tryUsername)) {
             return null;
         }
 
@@ -97,8 +97,8 @@ public class CardService {
     public void deleteCard(Long id, UserPrincipal userPrincipal) {
 
         Card card = getById(id);
-        Long tryUserId = userPrincipal.getUser().getId();
-        if (!Objects.equals(card.getAuthor().getId(), tryUserId)) {
+        String tryUsername = userPrincipal.getUser().getUsername();
+        if (!Objects.equals(card.getAuthorName(), tryUsername)) {
             return;
         }
 
