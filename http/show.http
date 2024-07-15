@@ -139,9 +139,43 @@ Cookie: access_token={{accessToken}};
 
 ### 카드 추가
 
+POST localhost:8080/api/columns/{{column_id1}}/cards
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+{
+  "title" : "card title",
+  "description": "card description",
+  "dueDate": "2024-07-16",
+  "workerId": 0
+}
+
+> {%
+ client.global.set("card_id1",response.body.result.id)
+ %}
+
+
 ### 카드 컬럼 변경
+PUT localhost:8080/api/columns/{{column_id1}}/cards/{{card_id1}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+{
+  "title" : "card title",
+  "description" : "card description",
+  "dueDate" : "2024-07-16",
+  "workerId" : {{user_id1}},
+  "columnId" : {{column_id2}}
+}
 
 ### 카드 댓글 추가
 
 ### 카드 삭제
+
+DELETE localhost:8080/api/columns/{{column_id2}}/cards/{{card_id1}}
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
 

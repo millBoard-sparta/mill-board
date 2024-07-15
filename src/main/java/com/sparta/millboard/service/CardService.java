@@ -46,7 +46,7 @@ public class CardService {
     }
 
     @Transactional
-    public CardResponseDto updateCard(CardUpdateRequestDto cardRequestDto, Long columnId, Long cardId,
+    public CardResponseDto updateCard(CardUpdateRequestDto cardRequestDto,Long cardId,
         UserPrincipal userPrincipal) {
 
         Card card = getById(cardId);
