@@ -1,6 +1,7 @@
 package com.sparta.millboard.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +25,19 @@ public class BoardColumn {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "card_id")
+    private List<Card> cardList;
+
     @Column(name = "column_order")
     private Integer order;
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public void setCard(Card card){
+        this.cardList.add(card);
     }
 
     public void update(BoardColumn column) {
