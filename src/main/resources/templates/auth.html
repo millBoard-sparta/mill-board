@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>로그인 / 회원가입</title>
+    <title>MillBoard</title>
     <style>
         .container {
             display: flex;
@@ -77,28 +77,28 @@
 <div class="container">
     <div class="form-container">
         <h2>로그인</h2>
-        <form id="loginForm" method="post">
+        <form th:action="@{/api/users/login}" th:object="${userRequestDto}" method="post">
             <div class="form-group">
                 <label for="loginUsername">ID:</label>
-                <input type="text" id="loginUsername" name="username" required>
+                <input type="text" id="loginUsername" th:field="*{username}" required>
             </div>
             <div class="form-group">
                 <label for="loginPassword">PASS:</label>
-                <input type="password" id="loginPassword" name="password" required>
+                <input type="password" id="loginPassword" th:field="*{password}" required>
             </div>
             <button type="submit">로그인</button>
         </form>
     </div>
     <div class="form-container">
         <h2>회원가입</h2>
-        <form id="signupForm" method="post">
+        <form id="signupForm" th:action="@{/api/users/signup}" th:object="${userRequestDto}" method="post">
             <div class="form-group">
                 <label for="signupUsername">ID:</label>
-                <input type="text" id="signupUsername" name="username" required>
+                <input type="text" id="signupUsername" th:field="*{username}" required>
             </div>
             <div class="form-group">
                 <label for="signupPassword">PASS:</label>
-                <input type="password" id="signupPassword" name="password" required>
+                <input type="password" id="signupPassword" th:field="*{password}" required>
             </div>
             <button type="submit">회원가입</button>
         </form>
@@ -113,8 +113,12 @@
 </div>
 
 <script>
-    function handleSubmit(form, event) {
-        event.preventDefault();
+    const form = document.getElementById('signupForm');
+    const modal = document.getElementById('signupModal');
+    const closeBtn = document.getElementById('modalCloseBtn');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
 
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);
@@ -126,46 +130,37 @@
             },
             body: JSON.stringify(data),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.status === 201 || response.ok) {
-                    if (form.id === 'signupForm') {
-                        document.getElementById('signupModal').style.display = "block";
-
-                    } else {
-                        // 로그인 성공 시 보드 페이지로 리디렉션
-                        window.location.href = '/board';
-                    }
+                if(data.status === 201) {
+                    modal.style.display = "block";
                 } else {
-                    alert('요청에 실패했습니다.');
+                    alert('회원가입에 실패했습니다.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('요청 중 오류가 발생했습니다.');
+                alert('회원가입 중 오류가 발생했습니다.');
             });
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        handleSubmit(this, e);
     });
 
-    document.getElementById('signupForm').addEventListener('submit', function(e) {
-        handleSubmit(this, e);
-    });
-
-    document.getElementById('modalCloseBtn').onclick = function() {
-        document.getElementById('signupModal').style.display = "none";
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
         window.location.href = '/auth';
     }
 
     window.onclick = function(event) {
-        const modal = document.getElementById('signupModal');
         if (event.target == modal) {
             modal.style.display = "none";
             window.location.href = '/auth';
         }
     }
+
 </script>
 </body>
 </html>
