@@ -1,7 +1,8 @@
 ### board create
 POST localhost:8080/api/boards
 Content-Type: application/json
-Authorization: {{accessToken}}
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
 
 {
   "title": "title",
@@ -15,7 +16,8 @@ Authorization: {{accessToken}}
 ### board column create
 POST localhost:8080/api/boards/{{board_id}}/columns
 Content-Type: application/json
-Authorization: {{accessToken}}
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
 
 {
   "statusName": "backlog",
@@ -28,11 +30,20 @@ Authorization: {{accessToken}}
 
 ### get board with columns
 GET localhost:8080/api/boards/{{board_id}}/columns
-Authorization: {{accessToken}}
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+### get board with columns and cards
+GET localhost:8080/api/boards/{{board_id}}/columns
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
 
 ### update column
 PUT localhost:8080/api/boards/{{board_id}}/columns/{{column_id}}
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
 
 {
   "order": 100
