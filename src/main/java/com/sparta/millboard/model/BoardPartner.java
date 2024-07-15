@@ -1,14 +1,13 @@
 package com.sparta.millboard.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.NoArgsConstructor;
 
-@SuperBuilder
+@NoArgsConstructor
 @Entity
 @Getter
-@RequiredArgsConstructor
 @Table(name = "board_partners")
 public class BoardPartner {
 
@@ -24,4 +23,10 @@ public class BoardPartner {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @Builder
+    public BoardPartner(User user, Board board) {
+        this.user = user;
+        this.board = board;
+    }
 }
