@@ -24,7 +24,7 @@ public class BoardController {
 
     @PostMapping("/api/boards")
     @Operation(summary = "보드 생성", description = "보드 : 보드 생성")
-    public ResponseEntity<?> createBoard(@RequestBody BoardCreateDto boardCreateDto) {
+    public ResponseEntity<CommonResponse> createBoard(@RequestBody BoardCreateDto boardCreateDto) {
 
         CommonResponse<BoardResponseDto> response = new CommonResponse<BoardResponseDto>(
                 "보드생성성공",
@@ -36,7 +36,7 @@ public class BoardController {
 
     @GetMapping("/api/boards/{boardId}")
     @Operation(summary = "보드 조회", description = "보드 : 보드 조회")
-    public ResponseEntity<?> showBoard(@PathVariable("boardId") Long id) {
+    public ResponseEntity<CommonResponse> showBoard(@PathVariable("boardId") Long id) {
         return ResponseEntity.ok(new CommonResponse(
                 "보드 보기",
                 HttpStatus.OK.value(),
@@ -46,7 +46,7 @@ public class BoardController {
 
     @PutMapping("/api/boards/{boardId}")
     @Operation(summary = "보드 수정", description = "보드 : 보드 수정")
-    public ResponseEntity<?> updateBoard(@PathVariable("boardId") Long id,
+    public ResponseEntity<CommonResponse> updateBoard(@PathVariable("boardId") Long id,
                                          @RequestBody BoardUpdateDto boardUpdateDto) {
         return ResponseEntity.ok(
                 new CommonResponse(
@@ -58,7 +58,7 @@ public class BoardController {
 
     @DeleteMapping("/api/boards/{boardId}")
     @Operation(summary = "보드 삭제", description = "보드 : 보드 삭제")
-    public ResponseEntity<?> deleteBoard(@PathVariable("boardId") Long id) {
+    public ResponseEntity<CommonResponse> deleteBoard(@PathVariable("boardId") Long id) {
         boardService.deleteBoard(id);
         return ResponseEntity.ok(
                 new CommonResponse(
@@ -70,7 +70,7 @@ public class BoardController {
 
     @PostMapping("/api/boards/{boardId}/partners")
     @Operation(summary = "보드 파트너 추가", description = "보드 : 보드 파트너 추가")
-    public ResponseEntity<?> addPartner(@PathVariable("boardId") Long boardId,
+    public ResponseEntity<CommonResponse> addPartner(@PathVariable("boardId") Long boardId,
                                         @RequestBody AddPartnerDto requestDto) {
         User user = userService.getById(requestDto.getUserId());
         return ResponseEntity.ok(
@@ -84,7 +84,7 @@ public class BoardController {
 
     @DeleteMapping("/api/boards/{boardId}/partners/{partnerId}")
     @Operation(summary = "보드 파트너 제거", description = "보드 : 보드 파트너 제거")
-    public ResponseEntity<?> removePartner(@PathVariable("boardId") Long boardId,
+    public ResponseEntity<CommonResponse> removePartner(@PathVariable("boardId") Long boardId,
                                            @PathVariable("partnerId") Long partnerId) {
         boardService.deletePartner(boardId, partnerId);
         return ResponseEntity.ok(
