@@ -42,6 +42,6 @@ public class CommentController {
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId,
                                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
         commentService.deleteComment(commentId, userPrincipal);
-        return ResponseEntity.ok("댓글 삭제 성공!");
+        return ResponseEntity.ok("제거 성공");
     }
 }
