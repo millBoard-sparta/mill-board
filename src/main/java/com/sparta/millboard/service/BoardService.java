@@ -2,6 +2,7 @@ package com.sparta.millboard.service;
 
 import com.sparta.millboard.dto.request.BoardCreateDto;
 import com.sparta.millboard.dto.request.BoardUpdateDto;
+import com.sparta.millboard.dto.response.BoardColumnResponseDto;
 import com.sparta.millboard.dto.response.BoardPartnerResponseDto;
 import com.sparta.millboard.dto.response.BoardResponseDto;
 import com.sparta.millboard.model.Board;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -22,12 +25,13 @@ public class BoardService {
     @Transactional
     public BoardResponseDto createBoard(BoardCreateDto boardCreateDto) {
         return BoardResponseDto.from(
-                this.boardRepository.save(boardCreateDto.toEntity())
+                boardRepository.save(boardCreateDto.toEntity())
         );
     }
 
     public Board getBoardById(Long id) {
-        return this.boardRepository.getReferenceById(id);
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
     @Transactional
@@ -59,5 +63,11 @@ public class BoardService {
     @Transactional
     public void deletePartner(Long boardId, Long partnerId) {
         boardPartnerRepository.deleteById(partnerId);
+    }
+
+    public BoardResponseDto getBoardWithColumns(Long boardId) {
+        Board boardWithColumns = boardRepository.findByIdWithColumns(boardId)
+                .orElseThrow(() -> new RuntimeException("not found board"));
+        return BoardResponseDto.from(boardWithColumns, true);
     }
 }

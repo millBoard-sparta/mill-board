@@ -1,6 +1,8 @@
 ### create
 POST localhost:8080/api/boards
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
 
 {
   "title": "title",
@@ -13,10 +15,15 @@ client.global.set("board_id", response.body.id)
 
 ### get
 GET localhost:8080/api/boards/{{board_id}}
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
 
 ### update
 PUT localhost:8080/api/boards/{{board_id}}
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
 
 {
   "title": "updated title",
@@ -26,6 +33,9 @@ Content-Type: application/json
 
 ### delete
 DELETE localhost:8080/api/board/{{board_id}}
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
 
 
 
