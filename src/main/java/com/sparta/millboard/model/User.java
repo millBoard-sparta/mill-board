@@ -1,6 +1,8 @@
 package com.sparta.millboard.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Getter;
@@ -25,6 +27,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> cardList = new ArrayList<>();
 
     public void updateUsername(String newUsername) {
         this.username = newUsername;

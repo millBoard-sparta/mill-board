@@ -1,6 +1,7 @@
 package com.sparta.millboard.service;
 
 import com.sparta.millboard.dto.request.CardRequestDto;
+import com.sparta.millboard.dto.request.CardUpdateRequestDto;
 import com.sparta.millboard.dto.response.CardResponseDto;
 import com.sparta.millboard.model.BoardColumn;
 import com.sparta.millboard.model.Card;
@@ -45,17 +46,20 @@ public class CardService {
     }
 
     @Transactional
-    public CardResponseDto updateCard(CardRequestDto cardRequestDto, Long columnId, Long cardId,
+    public CardResponseDto updateCard(CardUpdateRequestDto cardRequestDto, Long columnId, Long cardId,
         UserPrincipal userPrincipal) {
 
-        BoardColumn column = boardColumnService.getById(columnId);
         Card card = getById(cardId);
         Long tryUserId = userPrincipal.getUser().getId();
         if (!Objects.equals(card.getAuthor().getId(), tryUserId)) {
             return null;
         }
 
-        card.setColumn(column);
+        if(cardRequestDto.getColumnId()>0){
+            BoardColumn column = boardColumnService.getById(cardRequestDto.getColumnId());
+            card.updateColumn(column);
+        }
+
         card.update(cardRequestDto.toEntity());
 
         if(cardRequestDto.getWorkerId()>0){

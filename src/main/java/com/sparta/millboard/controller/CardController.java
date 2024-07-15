@@ -1,6 +1,7 @@
 package com.sparta.millboard.controller;
 
 import com.sparta.millboard.dto.request.CardRequestDto;
+import com.sparta.millboard.dto.request.CardUpdateRequestDto;
 import com.sparta.millboard.security.UserPrincipal;
 import com.sparta.millboard.service.CardService;
 import lombok.RequiredArgsConstructor;
@@ -40,9 +41,9 @@ public class CardController {
     }
 
     @PutMapping("/api/columns/{columnId}/cards/{cardId}")
-    public ResponseEntity<?> updateCard(@RequestBody CardRequestDto cardRequestDto,
+    public ResponseEntity<?> updateCard(@RequestBody CardUpdateRequestDto cardUpdateRequestDto,
         @PathVariable Long columnId, @PathVariable Long cardId,@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(cardService.updateCard(cardRequestDto, columnId, cardId,userPrincipal));
+        return ResponseEntity.ok(cardService.updateCard(cardUpdateRequestDto, columnId, cardId,userPrincipal));
     }
 
 
