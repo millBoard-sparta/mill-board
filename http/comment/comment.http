@@ -1,0 +1,24 @@
+### Create Comment
+POST localhost:8080/api/card/1/comment
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+{
+  "content": "댓글을 달아보자."
+}
+
+### Get Comments by Card ID
+GET localhost:8080/api/card/1/comment
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+### Get Comment by Comment ID
+GET localhost:8080/api/card/comment/3
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+### Delete Comment
+DELETE localhost:8080/api/card/comment/3
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
