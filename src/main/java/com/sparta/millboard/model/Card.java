@@ -1,6 +1,7 @@
 package com.sparta.millboard.model;
 
 import jakarta.persistence.*;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -33,7 +34,14 @@ public class Card {
     private User worker;
 
     public void setColumn(BoardColumn column) {
-        this.column=column;
+        column.setCard(this);
+    }
+
+    public void updateColumn(BoardColumn column) {
+        if (this.column == null || Objects.equals(this.column.getId(), column.getId())) {
+            return;
+        }
+        this.column.removeCard(this);
         column.setCard(this);
     }
 
@@ -42,7 +50,9 @@ public class Card {
     }
 
     public void setWorker(User user){
-        this.worker = user;
+        if (this.worker != null && !Objects.equals(this.worker.getId(), user.getId())) {
+            this.worker = user;
+        }
     }
 
     public void update(Card card) {
