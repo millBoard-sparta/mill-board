@@ -8,6 +8,8 @@ import com.sparta.millboard.dto.response.BoardResponseDto;
 import com.sparta.millboard.model.User;
 import com.sparta.millboard.service.BoardService;
 import com.sparta.millboard.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "B. 보드", description = "보드")
 public class BoardController {
     private final BoardService boardService;
     private final UserService userService;
 
     @PostMapping("/api/boards")
-    public ResponseEntity<?> createBoard(@RequestBody BoardCreateDto boardCreateDto) {
+    @Operation(summary = "보드 생성", description = "보드 : 보드 생성")
+    public ResponseEntity<CommonResponse> createBoard(@RequestBody BoardCreateDto boardCreateDto) {
 
         CommonResponse<BoardResponseDto> response = new CommonResponse<BoardResponseDto>(
                 "보드생성성공",
@@ -31,7 +35,8 @@ public class BoardController {
     }
 
     @GetMapping("/api/boards/{boardId}")
-    public ResponseEntity<?> showBoard(@PathVariable("boardId") Long id) {
+    @Operation(summary = "보드 조회", description = "보드 : 보드 조회")
+    public ResponseEntity<CommonResponse> showBoard(@PathVariable("boardId") Long id) {
         return ResponseEntity.ok(new CommonResponse(
                 "보드 보기",
                 HttpStatus.OK.value(),
@@ -40,7 +45,8 @@ public class BoardController {
     }
 
     @PutMapping("/api/boards/{boardId}")
-    public ResponseEntity<?> updateBoard(@PathVariable("boardId") Long id,
+    @Operation(summary = "보드 수정", description = "보드 : 보드 수정")
+    public ResponseEntity<CommonResponse> updateBoard(@PathVariable("boardId") Long id,
                                          @RequestBody BoardUpdateDto boardUpdateDto) {
         return ResponseEntity.ok(
                 new CommonResponse(
@@ -51,7 +57,8 @@ public class BoardController {
     }
 
     @DeleteMapping("/api/boards/{boardId}")
-    public ResponseEntity<?> deleteBoard(@PathVariable("boardId") Long id) {
+    @Operation(summary = "보드 삭제", description = "보드 : 보드 삭제")
+    public ResponseEntity<CommonResponse> deleteBoard(@PathVariable("boardId") Long id) {
         boardService.deleteBoard(id);
         return ResponseEntity.ok(
                 new CommonResponse(
@@ -62,7 +69,8 @@ public class BoardController {
     }
 
     @PostMapping("/api/boards/{boardId}/partners")
-    public ResponseEntity<?> addPartner(@PathVariable("boardId") Long boardId,
+    @Operation(summary = "보드 파트너 추가", description = "보드 : 보드 파트너 추가")
+    public ResponseEntity<CommonResponse> addPartner(@PathVariable("boardId") Long boardId,
                                         @RequestBody AddPartnerDto requestDto) {
         User user = userService.getById(requestDto.getUserId());
         return ResponseEntity.ok(
@@ -75,7 +83,8 @@ public class BoardController {
     }
 
     @DeleteMapping("/api/boards/{boardId}/partners/{partnerId}")
-    public ResponseEntity<?> removePartner(@PathVariable("boardId") Long boardId,
+    @Operation(summary = "보드 파트너 제거", description = "보드 : 보드 파트너 제거")
+    public ResponseEntity<CommonResponse> removePartner(@PathVariable("boardId") Long boardId,
                                            @PathVariable("partnerId") Long partnerId) {
         boardService.deletePartner(boardId, partnerId);
         return ResponseEntity.ok(

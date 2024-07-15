@@ -5,6 +5,8 @@ import com.sparta.millboard.dto.request.BoardColumnCreateDto;
 import com.sparta.millboard.dto.request.BoardColumnUpdateDto;
 import com.sparta.millboard.service.BoardColumnService;
 import com.sparta.millboard.service.BoardService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,13 +15,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "C. 컬럼", description = "컬럼")
 public class BoardColumnController {
     private final BoardColumnService boardColumnService;
     private final BoardService boardService;
 
     // board 의 모든 columns
     @GetMapping("/api/boards/{boardId}/columns")
-    public ResponseEntity<?> getBoardWithColumns(@PathVariable("boardId") Long boardId) {
+    @Operation(summary = "보드 조회", description = "컬럼 : 보드 조회")
+    public ResponseEntity<CommonResponse> getBoardWithColumns(@PathVariable("boardId") Long boardId) {
         return ResponseEntity.ok(
                 new CommonResponse(
                         "보드 조회",
@@ -30,7 +34,8 @@ public class BoardColumnController {
     }
 
     @PostMapping("/api/boards/{boardId}/columns")
-    public ResponseEntity<?> createBoardColumn(@Valid @RequestBody BoardColumnCreateDto requestDto,
+    @Operation(summary = "보드 컬럼 생성", description = "컬럼 : 보드 컬럼 생성")
+    public ResponseEntity<CommonResponse> createBoardColumn(@Valid @RequestBody BoardColumnCreateDto requestDto,
                                                @PathVariable("boardId") Long boardId) {
         return ResponseEntity.ok(
                 new CommonResponse(
@@ -42,7 +47,8 @@ public class BoardColumnController {
     }
 
     @PutMapping("/api/boards/{boardId}/columns/{columnId}")
-    public ResponseEntity<?> updateBoardColumn(@RequestBody BoardColumnUpdateDto requestDto,
+    @Operation(summary = "보드 컬럼 수정", description = "컬럼 : 보드 컬럼 수정")
+    public ResponseEntity<CommonResponse> updateBoardColumn(@RequestBody BoardColumnUpdateDto requestDto,
                                                @PathVariable("boardId") Long boardId,
                                                @PathVariable("columnId") Long columnId) {
         return ResponseEntity.ok(
@@ -56,7 +62,8 @@ public class BoardColumnController {
     }
 
     @DeleteMapping("/api/boards/{boardId}/columns/{columnId}")
-    public ResponseEntity<?> deleteBoardColumn(@PathVariable("columnId") Long columnId) {
+    @Operation(summary = "보드 컬럼 삭제", description = "컬럼 : 보드 컬럼 삭제")
+    public ResponseEntity<CommonResponse> deleteBoardColumn(@PathVariable("columnId") Long columnId) {
         boardColumnService.deleteById(columnId);
         return ResponseEntity.ok(
                 new CommonResponse(

@@ -5,6 +5,8 @@ import com.sparta.millboard.dto.request.CardRequestDto;
 import com.sparta.millboard.dto.request.CardUpdateRequestDto;
 import com.sparta.millboard.security.UserPrincipal;
 import com.sparta.millboard.service.CardService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "D. 카드", description = "카드")
 public class CardController {
 
     private final CardService cardService;
 
     @PostMapping("/api/columns/{columnId}/cards")
-    public ResponseEntity<?> createCard(@RequestBody CardRequestDto cardRequestDto,
+    @Operation(summary = "카드 생성", description = "카드 : 카드 생성")
+    public ResponseEntity<CommonResponse> createCard(@RequestBody CardRequestDto cardRequestDto,
         @PathVariable Long columnId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(
             new CommonResponse(
@@ -37,7 +41,8 @@ public class CardController {
     }
 
     @GetMapping("/api/cards/{cardId}")
-    public ResponseEntity<?> getCard(@PathVariable Long cardId) {
+    @Operation(summary = "카드 조회", description = "카드 : 카드 조회")
+    public ResponseEntity<CommonResponse> getCard(@PathVariable Long cardId) {
         return ResponseEntity.ok(
             new CommonResponse(
                 "카드 조회",
@@ -48,7 +53,8 @@ public class CardController {
     }
 
     @GetMapping("/api/cards")
-    public ResponseEntity<?> getCards(
+    @Operation(summary = "모든 카드 조회", description = "카드 : 모든 카드 조회")
+    public ResponseEntity<CommonResponse> getCards(
         @RequestParam(required = false, defaultValue = "-1") Long columnId,
         @RequestParam(required = false, defaultValue = "-1") Long userId) {
         return ResponseEntity.ok(
@@ -61,7 +67,8 @@ public class CardController {
     }
 
     @PutMapping("/api/columns/{columnId}/cards/{cardId}")
-    public ResponseEntity<?> updateCard(@RequestBody CardUpdateRequestDto cardUpdateRequestDto,
+    @Operation(summary = "카드 수정", description = "카드 : 카드 수정")
+    public ResponseEntity<CommonResponse> updateCard(@RequestBody CardUpdateRequestDto cardUpdateRequestDto,
         @PathVariable Long cardId,
         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(
@@ -74,15 +81,16 @@ public class CardController {
     }
 
     @DeleteMapping("/api/columns/{columnId}/cards/{cardId}")
-    public ResponseEntity<?> deleteCard(@PathVariable Long cardId,
-        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    @Operation(summary = "카드 삭제", description = "카드 : 카드 삭제")
+    public ResponseEntity<CommonResponse> deleteCard(@PathVariable Long cardId,
+                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
         cardService.deleteCard(cardId, userPrincipal);
         return ResponseEntity.ok(
-            new CommonResponse(
-                "카드 삭제",
-                HttpStatus.OK.value(),
-                null
-            )
+                new CommonResponse(
+                        "카드 삭제",
+                        HttpStatus.OK.value(),
+                        null
+                )
         );
     }
 }
