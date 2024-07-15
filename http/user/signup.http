@@ -20,3 +20,25 @@ Content-Type: application/json
     client.global.set("accessToken", response.body.result.accessToken)
 %}
 
+### profile
+GET localhost:8080/api/users/profile
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+### update-profile
+PUT localhost:8080/api/users/profile
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
+
+{
+  "username":"helloworld",
+  "newUsername":"helloworld22",
+  "password":"password",
+  "newPassword":"password22"
+}
+
+### refresh-accessToken
+PUT localhost:8080/api/token/refresh
+Authorization: Bearer {{accessToken}}
+Cookie: access_token={{accessToken}};
