@@ -81,19 +81,16 @@ public class CardController {
     }
 
     @DeleteMapping("/api/columns/{columnId}/cards/{cardId}")
+    @Operation(summary = "카드 삭제", description = "카드 : 카드 삭제")
     public ResponseEntity<?> deleteCard(@PathVariable Long cardId,
-        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
         cardService.deleteCard(cardId, userPrincipal);
         return ResponseEntity.ok(
-            new CommonResponse(
-                "카드 삭제",
-                HttpStatus.OK.value(),
-                null
-            )
+                new CommonResponse(
+                        "카드 삭제",
+                        HttpStatus.OK.value(),
+                        null
+                )
         );
-    @Operation(summary = "카드 삭제", description = "카드 : 카드 삭제")
-    public ResponseEntity<?> deleteCard(@PathVariable Long cardId,@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        cardService.deleteCard(cardId,userPrincipal);
-        return ResponseEntity.noContent().build();
     }
 }
