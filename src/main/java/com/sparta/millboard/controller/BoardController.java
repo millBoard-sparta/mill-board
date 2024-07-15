@@ -23,8 +23,7 @@ public class BoardController {
 
     @GetMapping("/api/boards/{boardId}")
     public ResponseEntity<?> showBoard(@PathVariable("boardId") Long id) {
-        return ResponseEntity.ok(boardService.getBoardWithColumns(id));
-//        return ResponseEntity.ok(boardService.getBoardById(id));
+        return ResponseEntity.ok(boardService.getBoardWithColumnsAndCards(id));
     }
 
     @PutMapping("/api/boards/{boardId}")

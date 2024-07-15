@@ -18,7 +18,7 @@ public class BoardColumnController {
     // board 의 모든 columns
     @GetMapping("/api/boards/{boardId}/columns")
     public ResponseEntity<?> getBoardWithColumns(@PathVariable("boardId") Long boardId) {
-        return ResponseEntity.ok(boardService.getBoardWithColumns(boardId));
+        return ResponseEntity.ok(boardService.getBoardWithColumnsAndCards(boardId));
     }
 
     @PostMapping("/api/boards/{boardId}/columns")

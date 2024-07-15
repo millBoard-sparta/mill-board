@@ -30,7 +30,7 @@ public class BoardResponseDto {
                 .id(board.getId())
                 .title(board.getTitle())
                 .description(board.getDescription())
-                .columns(withColumns ? board.getBoardColumns().stream().map(BoardColumnResponseDto::from).toList() : null)
+                .columns(withColumns ? board.getBoardColumns().stream().map(c -> BoardColumnResponseDto.from(c, true)).toList() : null)
                 .build();
     }
 
