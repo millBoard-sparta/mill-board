@@ -10,8 +10,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     Page<Card> findByColumnId(Long columnId, Pageable pageable);
 
-    Page<Card> findByAuthorId(Long userId, Pageable pageable);
-
     Page<Card> findByWorkerId(Long userId, Pageable pageable);
 
     Page<Card> findByColumnIdAndWorkerId(Long columnId,Long userId,Pageable pageable);
