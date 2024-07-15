@@ -1,12 +1,20 @@
 package com.sparta.millboard.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +23,7 @@ import java.util.Set;
 @Entity
 @Table(name = "columns")
 public class BoardColumn {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "column_id")
@@ -38,10 +47,6 @@ public class BoardColumn {
 
     public void setCard(Card card) {
         this.cardList.add(card);
-    }
-
-    public void removeCard(Card card) {
-        cardList.remove(card);
     }
 
     public void update(BoardColumn column) {

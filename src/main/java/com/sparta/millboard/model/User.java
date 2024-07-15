@@ -1,17 +1,26 @@
 package com.sparta.millboard.model;
 
-import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.Set;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @RequiredArgsConstructor
 @Getter
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -28,8 +37,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cardList = new ArrayList<>();
+    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Card> cardSet;
 
     public void updateUsername(String newUsername) {
         this.username = newUsername;
@@ -59,6 +68,14 @@ public class User {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void removeCard(Card card) {
+        this.cardSet.remove(card);
+    }
+
+    public void updateCard(Card card) {
+        this.cardSet.add(card);
     }
 
 }
