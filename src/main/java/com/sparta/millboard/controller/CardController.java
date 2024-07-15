@@ -1,9 +1,11 @@
 package com.sparta.millboard.controller;
 
 import com.sparta.millboard.dto.request.CardRequestDto;
+import com.sparta.millboard.security.UserPrincipal;
 import com.sparta.millboard.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +23,8 @@ public class CardController {
 
     @PostMapping("/api/columns/{columnId}/cards")
     public ResponseEntity<?> createCard(@RequestBody CardRequestDto cardRequestDto,
-        @PathVariable Long columnId) {
-        return ResponseEntity.ok(cardService.createCard(cardRequestDto, columnId));
+        @PathVariable Long columnId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(cardService.createCard(cardRequestDto, columnId,userPrincipal));
     }
 
     @GetMapping("/api/cards/{cardId}")
@@ -39,14 +41,14 @@ public class CardController {
 
     @PutMapping("/api/columns/{columnId}/cards/{cardId}")
     public ResponseEntity<?> updateCard(@RequestBody CardRequestDto cardRequestDto,
-        @PathVariable Long columnId, @PathVariable Long cardId) {
-        return ResponseEntity.ok(cardService.updateCard(cardRequestDto, columnId, cardId));
+        @PathVariable Long columnId, @PathVariable Long cardId,@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(cardService.updateCard(cardRequestDto, columnId, cardId,userPrincipal));
     }
 
 
     @DeleteMapping("/api/columns/{columnId}/cards/{cardId}")
-    public ResponseEntity<?> deleteCard(@PathVariable Long cardId) {
-        cardService.deleteCard(cardId);
+    public ResponseEntity<?> deleteCard(@PathVariable Long cardId,@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        cardService.deleteCard(cardId,userPrincipal);
         return ResponseEntity.noContent().build();
     }
 }
