@@ -1,6 +1,7 @@
 ### board create
 POST localhost:8080/api/boards
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "title": "title",
@@ -14,6 +15,7 @@ Content-Type: application/json
 ### board column create
 POST localhost:8080/api/boards/{{board_id}}/columns
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "statusName": "backlog",
@@ -23,6 +25,10 @@ Content-Type: application/json
 > {%
     client.global.set("column_id", response.body.id)
 %}
+
+### get board with columns
+GET localhost:8080/api/boards/{{board_id}}/columns
+Authorization: {{accessToken}}
 
 ### update column
 PUT localhost:8080/api/boards/{{board_id}}/columns/{{column_id}}

@@ -1,0 +1,22 @@
+### signup
+POST localhost:8080/api/users/signup
+Content-Type: application/json
+
+{
+  "username": "helloworld",
+  "password": "password"
+}
+
+### login
+POST localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "username": "helloworld",
+  "password": "password"
+}
+
+> {%
+    client.global.set("accessToken", response.body.result.accessToken)
+%}
+
