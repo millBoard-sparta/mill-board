@@ -58,8 +58,13 @@ public class UserService {
         String accessToken = jwtService.generateAccessToken(requestDto.getUsername());
         String refreshToken = jwtService.generateRefreshToken(requestDto.getUsername());
 
+
         user.addRefreshToken(refreshToken);
-        response.addCookie(new Cookie("access_token", accessToken));
+
+        Cookie cookie = new Cookie("access_token", accessToken);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
         response.addCookie(new Cookie("refresh_token", refreshToken));
         userRepository.save(user);
 
@@ -117,6 +122,18 @@ public class UserService {
         userRepository.save(newProfile);
 
         return new UserResponseDto(newProfile);
+    }
+
+    // 사용자 : 토큰 재발급
+    public LoginResponseDto refreshAccessToken(User user) {
+        String refreshToken = user.getRefreshToken();
+        if (refreshToken == null || !jwtService.isValidToken(refreshToken)) {
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+
+        String newAccessToken = jwtService.generateAccessToken(user.getUsername());
+
+        return new LoginResponseDto(user.getUsername(), newAccessToken, refreshToken);
     }
 
 }
