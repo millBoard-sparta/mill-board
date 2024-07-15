@@ -15,6 +15,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             left join fetch b.boardColumns bc
             left join fetch bc.cardList
             where b.id = :boardId
+            order by bc.order
             """)
     Optional<Board> findByIdWithColumnsAndCards(@Param("boardId") Long boardId);
 }
