@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
     // TODO: board with columns
-    @Query("select b from Board b join fetch BoardColumn bc on bc.board.id = b.id where b.id = :boardId")
+    @Query("select distinct b from Board b left join fetch b.boardColumns bc where b.id = :boardId")
     Optional<Board> findByIdWithColumns(@Param("boardId") Long boardId);
 }
