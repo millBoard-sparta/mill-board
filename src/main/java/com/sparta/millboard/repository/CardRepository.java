@@ -12,7 +12,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     Page<Card> findByAuthorId(Long userId, Pageable pageable);
 
+    Page<Card> findByWorkerId(Long userId, Pageable pageable);
 
-    Page<Card> findByColumnIdAndAuthorId(@Param("columnId") Long columnId,
-        @Param("userId") Long userId, Pageable pageable);
+    Page<Card> findByColumnIdAndWorkerId(Long columnId,Long userId,Pageable pageable);
 }
