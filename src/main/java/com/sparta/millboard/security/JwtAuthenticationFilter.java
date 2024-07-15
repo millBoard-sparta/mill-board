@@ -3,6 +3,7 @@ package com.sparta.millboard.security;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -30,12 +32,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         log.info("doFilterInternal 메서드 실행");
-        String accessToken = request.getHeader("Authorization");
-        log.info("doFilterInternal accessToken : " + accessToken);
+        Cookie accessCookie = request.getCookies() == null ? null : Arrays.stream(request.getCookies()).filter(c -> c.getName().equals("access_token")).findAny().orElse(null);
 
+        String accessToken = accessCookie == null ? request.getHeader("Authorization") : "Bearer " + accessCookie.getValue();
+
+        log.info("doFilterInternal accessToken : " + accessToken);
         validateToken(accessToken);
         log.info("doFilterInternal validateToken(accessToken) : " + accessToken);
         filterChain.doFilter(request, response);
+
 
     }
 

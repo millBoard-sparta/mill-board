@@ -54,7 +54,6 @@ public class JwtService {
 
     // 엑세스 토큰
     public String generateAccessToken(String username) {
-
         return createToken(username, accessExpireTime);
 
     }
@@ -70,8 +69,7 @@ public class JwtService {
     private String createToken(String username, Long expirationTime) {
 
         Date now = new Date();
-        String token = BEARER_PREFIX +
-                Jwts.builder()
+        String token = Jwts.builder()
                         .setSubject(username)
                         .setIssuedAt(now)
                         .setExpiration(new Date(now.getTime() + expirationTime))

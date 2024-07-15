@@ -7,6 +7,7 @@ import com.sparta.millboard.dto.response.UserResponseDto;
 import com.sparta.millboard.model.User;
 import com.sparta.millboard.repository.UserRepository;
 import com.sparta.millboard.security.JwtService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,8 @@ public class UserService {
         String refreshToken = jwtService.generateRefreshToken(requestDto.getUsername());
 
         user.addRefreshToken(refreshToken);
+        response.addCookie(new Cookie("access_token", accessToken));
+        response.addCookie(new Cookie("refresh_token", refreshToken));
         userRepository.save(user);
 
         response.setHeader("Authorization", accessToken);

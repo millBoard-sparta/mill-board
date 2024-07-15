@@ -1,0 +1,11 @@
+### card
+POST localhost:8080/api/columns/1/cards
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+{
+  "title": "a",
+  "description": "fffff",
+  "workerId": 1
+}
+
