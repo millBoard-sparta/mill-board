@@ -14,6 +14,8 @@ public class CardRequestDto {
 
     private String  dueDate;
 
+    private Long workerId;
+
     public Card toEntity(){
         return Card.builder()
             .title(title)

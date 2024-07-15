@@ -4,8 +4,12 @@ import com.sparta.millboard.dto.request.CardRequestDto;
 import com.sparta.millboard.dto.response.CardResponseDto;
 import com.sparta.millboard.model.BoardColumn;
 import com.sparta.millboard.model.Card;
+import com.sparta.millboard.model.User;
 import com.sparta.millboard.repository.CardRepository;
+import com.sparta.millboard.security.UserPrincipal;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,30 +18,49 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j(topic = "cardService")
 public class CardService {
 
     private final CardRepository cardRepository;
     private final BoardColumnService boardColumnService;
     private final UserService userService;
 
-    public CardResponseDto createCard(CardRequestDto cardRequestDto, Long columnId) {
+    public CardResponseDto createCard(CardRequestDto cardRequestDto, Long columnId,
+        UserPrincipal userPrincipal) {
 
         BoardColumn column = boardColumnService.getById(columnId);
+        User user = userPrincipal.getUser();
 
-        Card card = cardRepository.save(cardRequestDto.toEntity());
+        Card card = cardRequestDto.toEntity();
         card.setColumn(column);
+        card.setAuthor(user);
+
+        if(cardRequestDto.getWorkerId()>0){
+            card.setWorker(userService.getById(cardRequestDto.getWorkerId()));
+        }
+
+        cardRepository.save(card);
 
         return CardResponseDto.from(card);
     }
 
     @Transactional
-    public CardResponseDto updateCard(CardRequestDto cardRequestDto, Long columnId, Long cardId) {
+    public CardResponseDto updateCard(CardRequestDto cardRequestDto, Long columnId, Long cardId,
+        UserPrincipal userPrincipal) {
 
         BoardColumn column = boardColumnService.getById(columnId);
-
         Card card = getById(cardId);
+        Long tryUserId = userPrincipal.getUser().getId();
+        if (!Objects.equals(card.getAuthor().getId(), tryUserId)) {
+            return null;
+        }
+
         card.setColumn(column);
         card.update(cardRequestDto.toEntity());
+
+        if(cardRequestDto.getWorkerId()>0){
+            card.setWorker(userService.getById(cardRequestDto.getWorkerId()));
+        }
 
         return CardResponseDto.from(card);
     }
@@ -56,19 +79,25 @@ public class CardService {
             cardPage = cardRepository.findAll(pageable);
 
         } else if (columnId > 0 && userId <= 0) { // 상태별 조회
-            cardPage = cardRepository.findByColumnId(columnId,pageable);
+            cardPage = cardRepository.findByColumnId(columnId, pageable);
 
         } else if (columnId <= 0) { // 유저별 조회
-            cardPage = cardRepository.findByAuthorId(userId,pageable);
-        }
-        else{
-            cardPage = cardRepository.findByColumnIdAndAuthorId(columnId, userId,pageable);
+            cardPage = cardRepository.findByWorkerId(userId, pageable);
+        } else {
+            cardPage = cardRepository.findByColumnIdAndWorkerId(columnId, userId, pageable);
         }
 
         return cardPage.map(CardResponseDto::from);
     }
 
-    public void deleteCard(Long id) {
+    public void deleteCard(Long id, UserPrincipal userPrincipal) {
+
+        Card card = getById(id);
+        Long tryUserId = userPrincipal.getUser().getId();
+        if (!Objects.equals(card.getAuthor().getId(), tryUserId)) {
+            return;
+        }
+
         cardRepository.deleteById(id);
     }
 

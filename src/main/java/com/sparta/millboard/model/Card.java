@@ -20,7 +20,7 @@ public class Card {
     private String description;
     private String dueDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "column_id")
     private BoardColumn column;
 
@@ -28,13 +28,21 @@ public class Card {
     @JoinColumn(name = "user_id")
     private User author;
 
-    @OneToOne
-    @JoinColumn(name = "assignee_id")
-    private User assignee;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "worker_id")
+    private User worker;
 
     public void setColumn(BoardColumn column) {
         this.column=column;
         column.setCard(this);
+    }
+
+    public void setAuthor(User user) {
+        this.author = user;
+    }
+
+    public void setWorker(User user){
+        this.worker = user;
     }
 
     public void update(Card card) {

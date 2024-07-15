@@ -1,6 +1,7 @@
 ### create
 POST localhost:8080/api/boards
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "title": "title",
@@ -13,6 +14,7 @@ client.global.set("board_id", response.body.id)
 
 ### get
 GET localhost:8080/api/boards/{{board_id}}
+Authorization: {{accessToken}}
 
 ### update
 PUT localhost:8080/api/boards/{{board_id}}
