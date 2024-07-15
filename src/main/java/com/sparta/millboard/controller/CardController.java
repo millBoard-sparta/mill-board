@@ -29,7 +29,7 @@ public class CardController {
 
     @PostMapping("/api/columns/{columnId}/cards")
     @Operation(summary = "카드 생성", description = "카드 : 카드 생성")
-    public ResponseEntity<?> createCard(@RequestBody CardRequestDto cardRequestDto,
+    public ResponseEntity<CommonResponse> createCard(@RequestBody CardRequestDto cardRequestDto,
         @PathVariable Long columnId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(
             new CommonResponse(
@@ -42,7 +42,7 @@ public class CardController {
 
     @GetMapping("/api/cards/{cardId}")
     @Operation(summary = "카드 조회", description = "카드 : 카드 조회")
-    public ResponseEntity<?> getCard(@PathVariable Long cardId) {
+    public ResponseEntity<CommonResponse> getCard(@PathVariable Long cardId) {
         return ResponseEntity.ok(
             new CommonResponse(
                 "카드 조회",
@@ -54,7 +54,7 @@ public class CardController {
 
     @GetMapping("/api/cards")
     @Operation(summary = "모든 카드 조회", description = "카드 : 모든 카드 조회")
-    public ResponseEntity<?> getCards(
+    public ResponseEntity<CommonResponse> getCards(
         @RequestParam(required = false, defaultValue = "-1") Long columnId,
         @RequestParam(required = false, defaultValue = "-1") Long userId) {
         return ResponseEntity.ok(
@@ -68,7 +68,7 @@ public class CardController {
 
     @PutMapping("/api/columns/{columnId}/cards/{cardId}")
     @Operation(summary = "카드 수정", description = "카드 : 카드 수정")
-    public ResponseEntity<?> updateCard(@RequestBody CardUpdateRequestDto cardUpdateRequestDto,
+    public ResponseEntity<CommonResponse> updateCard(@RequestBody CardUpdateRequestDto cardUpdateRequestDto,
         @PathVariable Long cardId,
         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(
@@ -82,7 +82,7 @@ public class CardController {
 
     @DeleteMapping("/api/columns/{columnId}/cards/{cardId}")
     @Operation(summary = "카드 삭제", description = "카드 : 카드 삭제")
-    public ResponseEntity<?> deleteCard(@PathVariable Long cardId,
+    public ResponseEntity<CommonResponse> deleteCard(@PathVariable Long cardId,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         cardService.deleteCard(cardId, userPrincipal);
         return ResponseEntity.ok(
