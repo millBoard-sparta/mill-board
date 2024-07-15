@@ -5,7 +5,7 @@ Authorization: Bearer {{accessToken}}
 Cookie: access_token={{accessToken}};
 
 {
-  "content": "화이팅!!!!"
+  "content": "댓글"
 }
 
 > {%

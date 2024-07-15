@@ -1,14 +1,8 @@
 package com.sparta.millboard.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +25,16 @@ public class Card {
     private String dueDate;
     private String authorName;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "column_id")
     private BoardColumn column;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "worker_id")
     private User worker;
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     public void setAuthor(String author) {
         this.authorName = author;
